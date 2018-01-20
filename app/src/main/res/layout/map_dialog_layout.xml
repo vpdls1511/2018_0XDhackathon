@@ -27,15 +27,16 @@
             android:id="@+id/editTextTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="제목"
+            android:hint="Write Title"
             android:textColor="#333333" />
 
         <EditText
             android:id="@+id/editTextContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="내용"
-            android:textColor="#333333" />
+            android:hint="Write Content"
+            android:textColor="#333333"
+            android:inputType="textMultiLine"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.libs.ImageDto;
 import com.keen.android.happckathon.ui.activities.ContentActivity;
 
 import java.io.FileNotFoundException;
@@ -41,6 +42,9 @@ public class MapDialog extends Dialog {
 
     private View.OnClickListener leftClickEvent;
     private View.OnClickListener rightClickEvent;
+
+    public static String titleData = null;
+    public static String contentData = null;
 
 
 
@@ -71,6 +75,8 @@ public class MapDialog extends Dialog {
                 if (titleText.getText().length() <= 0 || contentText.getText().length() <=0){
                     Toast.makeText(getContext(), "입력칸이 비어있습니다.", Toast.LENGTH_SHORT).show();
                 }else{
+                    titleData = titleText.getText().toString();
+                    contentData = contentText.getText().toString();
                     rightButton.setOnClickListener(rightClickEvent);
                 }
             });

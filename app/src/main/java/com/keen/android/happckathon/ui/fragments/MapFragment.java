@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,10 +29,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.libs.ImageDto;
 import com.keen.android.happckathon.ui.dialogs.MapDialog;
 
 import java.io.File;
@@ -52,6 +56,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final String ARG_PARAM2 = "param2";
     private static final int GALLERY_CODE = 10;
     private FirebaseStorage storage;
+    private FirebaseDatabase database;
 
     // 구글 맵에 표시할 마커에 대한 옵션 설정
     MarkerOptions makerOptions = new MarkerOptions();
@@ -97,6 +102,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -174,12 +180,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private View.OnClickListener rightClickEvent = view -> {
         UploadTask uploadTask = riversRef.putFile(file);
 
+        // 이미지 업로드
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(exception -> {
             // Handle unsuccessful uploads
         }).addOnSuccessListener(taskSnapshot -> {
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-            // Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            @SuppressWarnings("VisibleForTests")
+            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+            ImageDto imageDto = new ImageDto();
+            imageDto.imageUrl = downloadUrl.toString();
+            imageDto.title = MapDialog.titleData;
+            imageDto.content = MapDialog.contentData;
+
+            database.getReference().child("images").push().setValue(imageDto);
+
             Toast.makeText(getContext(), "File Upload Success", Toast.LENGTH_SHORT).show();
         });
     };
