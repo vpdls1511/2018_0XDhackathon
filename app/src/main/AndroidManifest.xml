@@ -51,8 +51,8 @@
         <activity
             android:name=".ui.activities.ContentActivity"
             android:label="@string/title_activity_content"
+            android:uiOptions="splitActionBarWhenNarrow"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".item" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,9 +65,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

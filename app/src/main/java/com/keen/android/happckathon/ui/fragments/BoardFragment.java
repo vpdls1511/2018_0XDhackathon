@@ -98,11 +98,11 @@ public class BoardFragment extends Fragment {
 
         Item[] item = new Item[5];
 
-        item[0] = new Item(R.drawable.first, "정연", "서울특별시", formattedDate);
-        item[1] = new Item(R.drawable.second, "다현", "서울특별시", formattedDate);
-        item[2] = new Item(R.drawable.third, "다현", "서울특별시", formattedDate);
-        item[3] = new Item(R.drawable.first, "First", "서울특별시", formattedDate);
-        item[4] = new Item(R.drawable.first, "First", "서울특별시", formattedDate);
+        item[0] = new Item(R.drawable.first, "아이파크단지", "부산", formattedDate);
+        item[1] = new Item(R.drawable.second, "혜태상", "광화문", formattedDate);
+        item[2] = new Item(R.drawable.third, "루브르 박물관", "프랑스 파리", formattedDate);
+        item[3] = new Item(R.drawable.fourth, "타임스퀘어", "미국 뉴욕", formattedDate);
+        item[4] = new Item(R.drawable.fifth, "피라미드", "이집트", formattedDate);
 
         for (int i=0;i<5;i++) items.add(item[i]);
 

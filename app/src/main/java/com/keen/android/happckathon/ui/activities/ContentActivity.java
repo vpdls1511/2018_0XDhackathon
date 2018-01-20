@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.ui.fragments.BestBoardFragment;
 import com.keen.android.happckathon.ui.fragments.BoardFragment;
 import com.keen.android.happckathon.ui.fragments.MapFragment;
 import com.keen.android.happckathon.ui.fragments.SettingFragment;
@@ -49,8 +50,7 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -64,10 +64,8 @@ public class ContentActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show());
-        FirebaseAuth.getInstance().signOut();
+
+        //
 
     }
 
@@ -147,7 +145,7 @@ public class ContentActivity extends AppCompatActivity {
                 case 1:
                     return new MapFragment();
                 case 2:
-                    return new BoardFragment();
+                    return new BestBoardFragment();
                 case 3:
                     return new SettingFragment();
             }
