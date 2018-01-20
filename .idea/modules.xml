@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Happckathon_2018.iml" filepath="$PROJECT_DIR$/Happckathon_2018.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/happckathon.iml" filepath="$PROJECT_DIR$/happckathon.iml" />
+      <module fileurl="file://D:\2018\Happckathon_2018\app\app.iml" filepath="D:\2018\Happckathon_2018\app\app.iml" />
+      <module fileurl="file://D:\2018\Happckathon_2018\happckathon.iml" filepath="D:\2018\Happckathon_2018\happckathon.iml" />
     </modules>
   </component>
 </project>
