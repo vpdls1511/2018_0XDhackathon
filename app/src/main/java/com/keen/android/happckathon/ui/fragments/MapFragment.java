@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
@@ -70,6 +71,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     // 구글 맵에 표시할 마커에 대한 옵션 설정
     MarkerOptions makerOptions = new MarkerOptions();
 
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -133,6 +137,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         View convertView = inflater.inflate(R.layout.fragment_map, container, false);
 
+        init();
+
         // Get the location manager
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the locatioin provider -> use
@@ -182,7 +188,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     ImageDto imageDto = new ImageDto();
-                    imageDto.imageUrl = file_URL.toString();
+                   // imageDto.imageUrl = file_URL.toString();
                     imageDto.title = MapDialog.titleData;
                     imageDto.content = MapDialog.contentData;
                     imageDto.let = String.valueOf(mapLat);
@@ -221,6 +227,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    private void init(){
+        pref = getContext().getSharedPreferences("image",Context.MODE_PRIVATE);
+        editor = pref.edit();
+    }
+
     private View.OnClickListener leftClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -247,6 +258,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             imageDto.let = String.valueOf(mapLat);
             imageDto.lst = String.valueOf(maplongitude);
 
+            editor.putString("mapImage","sdfasdfasdfasdfa").apply();
 
             database.getReference().child("images").push().setValue(imageDto);
             Toast.makeText(getContext(), "File Upload Success", Toast.LENGTH_SHORT).show();

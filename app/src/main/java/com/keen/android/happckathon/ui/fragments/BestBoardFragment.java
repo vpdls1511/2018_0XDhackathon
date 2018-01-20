@@ -1,8 +1,11 @@
 package com.keen.android.happckathon.ui.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +39,14 @@ public class BestBoardFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    int i = 100;
+
     Calendar c = Calendar.getInstance();
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String formattedDate = df.format(c.getTime());
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
 
     private DatabaseReference databaseReference;
@@ -89,23 +97,43 @@ public class BestBoardFragment extends Fragment {
 
         View convertView = inflater.inflate(R.layout.fragment_bestboard, container, false);
 
+        init();
 
         recyclerView = convertView.findViewById(R.id.bestView);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
 
-        Item[] item = new Item[5];
+        String l = pref.getString("IMG","IMG");
+        if(l.length() <= 0 || l == null){
+            Item[] item = new Item[5];
 
-        item[0] = new Item(R.drawable.first, "부산 송도 해수욕장", "부산 서구", formattedDate);
-        item[1] = new Item(R.drawable.second, "을왕리 해수욕장", "인천 중구", formattedDate);
-        item[2] = new Item(R.drawable.third, "루브르 박물관", "프랑스 파리", formattedDate);
-        item[3] = new Item(R.drawable.fourth, "타임스퀘어", "미국 뉴욕", formattedDate);
-        item[4] = new Item(R.drawable.fifth, "피라미드", "이집트", formattedDate);
+            item[0] = new Item(R.drawable.first, "부산 송도 해수욕장", "부산 서구", formattedDate);
+            item[1] = new Item(R.drawable.second, "을왕리 해수욕장", "인천 중구", formattedDate);
+            item[2] = new Item(R.drawable.third, "루브르 박물관", "프랑스 파리", formattedDate);
+            item[3] = new Item(R.drawable.fourth, "타임스퀘어", "미국 뉴욕", formattedDate);
+            item[4] = new Item(R.drawable.fifth, "피라미드", "이집트", formattedDate);
 
-        for (int i=0;i<5;i++) items.add(item[i]);
+            for (int i=0;i<5;i++) items.add(item[i]);
 
-        recyclerView.setAdapter(new RecyclerAdapter(getContext(),items,R.layout.fragment_board));
+            recyclerView.setAdapter(new RecyclerAdapter(getContext(),items,R.layout.fragment_board));
+
+        }else {
+
+            Item[] item = new Item[6];
+
+            item[0] = new Item(R.drawable.sixth, "타지마할", "인도 아그라", formattedDate);
+            item[1] = new Item(R.drawable.first, "부산 송도 해수욕장", "부산 서구", formattedDate);
+            item[2] = new Item(R.drawable.second, "을왕리 해수욕장", "인천 중구", formattedDate);
+            item[3] = new Item(R.drawable.third, "루브르 박물관", "프랑스 파리", formattedDate);
+            item[4] = new Item(R.drawable.fourth, "타임스퀘어", "미국 뉴욕", formattedDate);
+            item[5] = new Item(R.drawable.fifth, "피라미드", "이집트", formattedDate);
+
+            for (int i=0;i<5;i++) items.add(item[i]);
+
+            recyclerView.setAdapter(new RecyclerAdapter(getContext(),items,R.layout.fragment_board));
+
+        }
 
         return convertView;
     }
@@ -117,6 +145,24 @@ public class BestBoardFragment extends Fragment {
         }
     }
 
+    private void init(){
+        pref = getContext().getSharedPreferences("image", Context.MODE_PRIVATE);
+        editor = pref.edit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (i == 100){
+            refrash();
+            i=0;
+        }
+    }
+
+    private void refrash(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
     /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
