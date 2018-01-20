@@ -93,7 +93,7 @@ public class SettingFragment extends Fragment {
         logoutButton = convertView.findViewById(R.id.logoutButton);
 
         Glide.with(getContext())
-                .load(R.drawable.first)
+                .load(R.drawable.kangsungjun)
                 .into(profileImage);
 
         Glide.with(getContext())
