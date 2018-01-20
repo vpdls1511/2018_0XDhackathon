@@ -40,7 +40,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.keen.android.happckathon.R;
-import com.keen.android.happckathon.libs.GpsInfo;
 import com.keen.android.happckathon.ui.dialogs.MapDialog;
 
 import java.io.File;
