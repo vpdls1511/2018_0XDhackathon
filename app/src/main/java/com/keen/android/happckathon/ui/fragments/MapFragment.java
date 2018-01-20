@@ -42,6 +42,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String mParam1;
     private String mParam2;
 
+    private double mapLat;
+    private double maplongitude;
     private OnFragmentInteractionListener mListener;
     private GoogleMap mMap;
 
@@ -86,6 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.maps);
         mapFragment.getMapAsync(this);
 
+
         return convertView;
     }
 
@@ -105,48 +108,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        makerOptions.position(new LatLng(37.52487, 126.92723));
-        makerOptions.title("여의도!!");
-        makerOptions.snippet("여의도 한강 치맥 합시다.");
-        makerOptions.alpha(0.5f);
-        mMap.addMarker(makerOptions);
+        mMap.setOnMapLongClickListener(latLng -> {
+            mapLat = latLng.latitude;
+            maplongitude = latLng.longitude;
+            makerOptions.position(new LatLng(mapLat, maplongitude));
 
-        mMap.setOnMarkerClickListener(this);
+            mMap.addMarker(makerOptions);
+        });
     }
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }*/
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         Toast.makeText(getContext(),marker.getPosition().toString(),Toast.LENGTH_SHORT).show();
         return true;
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
