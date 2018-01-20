@@ -4,6 +4,7 @@
 
     <string name="facebook_app_id">2031728083735663</string>
     <string name="fb_login_protocol_scheme">fb2031728083735663</string>
+    <string name="google_map_api">AIzaSyCQh6UdmNqorpUcRVwhEl0HlU_j3XRpPfY</string>
     <string name="title_activity_content">ContentActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
