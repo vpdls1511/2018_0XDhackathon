@@ -35,7 +35,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -174,6 +177,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             makerOptions.position(new LatLng(mapLat, maplongitude));
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+
+            database.getReference().child("images").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ImageDto imageDto = new ImageDto();
+                    imageDto.imageUrl = file_URL.toString();
+                    imageDto.title = MapDialog.titleData;
+                    imageDto.content = MapDialog.contentData;
+                    imageDto.let = String.valueOf(mapLat);
+                    imageDto.lst = String.valueOf(maplongitude);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             startActivityForResult(intent, GALLERY_CODE); // OK 눌렀을 때(수정해야댐)
 
