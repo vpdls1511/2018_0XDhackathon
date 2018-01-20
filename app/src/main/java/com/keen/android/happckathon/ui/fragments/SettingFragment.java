@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
 import com.keen.android.happckathon.R;
 
 
@@ -77,14 +78,20 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        imgProfile = container.findViewById(R.id.img_profile);
-        name = container.findViewById(R.id.name);
-        et_Phone = container.findViewById(R.id.et_Phone);
-        et_Gender = container.findViewById(R.id.et_Gender);
-        Accountbtn = container.findViewById(R.id.Accountbtn);
 
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View convertView = inflater.inflate(R.layout.fragment_setting, container, false);
+        // Inflate the layout for this fragment
+        imgProfile = convertView.findViewById(R.id.img_profile);
+        name = convertView.findViewById(R.id.name);
+        et_Phone = convertView.findViewById(R.id.et_Phone);
+        et_Gender = convertView.findViewById(R.id.et_Gender);
+        Accountbtn = convertView.findViewById(R.id.Accountbtn);
+
+        Glide.with(getContext())
+                .load(R.drawable.logoutbtn)
+                .into(Accountbtn);
+
+        return convertView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
