@@ -1,6 +1,7 @@
 package com.keen.android.happckathon.ui.fragments;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.ui.dialogs.MapDialog;
 
 import java.io.File;
 
@@ -62,6 +65,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String file_URL;
     private OnFragmentInteractionListener mListener;
     private GoogleMap mMap;
+
+    private MapDialog mapDialog;
 
     public MapFragment() {
         // Required empty public constructor
@@ -143,6 +148,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             file_URL = getPath(data.getData());
 
+            mapDialog = new MapDialog(getContext(), file_URL, leftClickEvent);
+
+            mapDialog.setCancelable(true);
+            mapDialog.getWindow().setGravity(Gravity.CENTER);
+            mapDialog.show();
 
 
             Uri file = Uri.fromFile(new File(getPath(data.getData())));
@@ -150,22 +160,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             UploadTask uploadTask = riversRef.putFile(file);
 
             // Register observers to listen for when the download is done or if it fails
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    // Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    Toast.makeText(getContext(), "File Upload Success", Toast.LENGTH_SHORT).show();
-                }
+            uploadTask.addOnFailureListener(exception -> {
+                // Handle unsuccessful uploads
+            }).addOnSuccessListener(taskSnapshot -> {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                // Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Toast.makeText(getContext(), "File Upload Success", Toast.LENGTH_SHORT).show();
             });
         }
     }
 
+    private View.OnClickListener leftClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mapDialog.dismiss();
+        }
+    };
     public String getPath(Uri uri){
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader cursorLoader = new CursorLoader(getContext(), uri, proj, null, null, null);
