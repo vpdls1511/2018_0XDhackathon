@@ -7,6 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.support.v4.app.FragmentActivity;
 
 import com.keen.android.happckathon.R;
 
@@ -30,6 +35,12 @@ public class SettingFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    ImageView imgProfile;
+    TextView name;
+    EditText et_Phone;
+    EditText et_Gender;
+    ImageView Accountbtn;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -60,12 +71,19 @@ public class SettingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        imgProfile = container.findViewById(R.id.img_profile);
+        name = container.findViewById(R.id.name);
+        et_Phone = container.findViewById(R.id.et_Phone);
+        et_Gender = container.findViewById(R.id.et_Gender);
+        Accountbtn = container.findViewById(R.id.Accountbtn);
+
         return inflater.inflate(R.layout.fragment_setting, container, false);
     }
 
@@ -73,17 +91,6 @@ public class SettingFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 

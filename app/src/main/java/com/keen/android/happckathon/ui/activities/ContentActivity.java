@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.keen.android.happckathon.R;
 import com.keen.android.happckathon.ui.fragments.BoardFragment;
 import com.keen.android.happckathon.ui.fragments.MapFragment;
+import com.keen.android.happckathon.ui.fragments.SettingFragment;
 
 public class ContentActivity extends AppCompatActivity {
 
@@ -148,7 +149,7 @@ public class ContentActivity extends AppCompatActivity {
                 case 2:
                     return new BoardFragment();
                 case 3:
-                    return new BoardFragment();
+                    return new SettingFragment();
             }
             return null;
         }
