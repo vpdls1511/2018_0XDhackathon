@@ -1,4 +1,4 @@
-package com.keen.android.happckathon;
+package com.keen.android.happckathon.ui.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+
+import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.ui.fragments.BoardFragment;
 
 public class ContentActivity extends AppCompatActivity {
 
@@ -137,15 +140,25 @@ public class ContentActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position){
+                case 0:
+                    return new BoardFragment();
+                case 1:
+                    return new BoardFragment();
+                case 2:
+                    return new BoardFragment();
+                case 3:
+                    return new BoardFragment();
+                case 4:
+                    return new BoardFragment();
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
     }
 }

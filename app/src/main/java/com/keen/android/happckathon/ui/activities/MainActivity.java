@@ -1,11 +1,10 @@
-package com.keen.android.happckathon;
+package com.keen.android.happckathon.ui.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -20,14 +19,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.keen.android.happckathon.R;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -130,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
+                        loginSuccess();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -148,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
+                        loginSuccess();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -164,7 +163,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            Intent intent = new Intent(MainActivity.this, )
+            loginSuccess();
         }
+    }
+
+    public void loginSuccess(){
+        Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
