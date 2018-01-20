@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.keen.android.happckathon.R;
 import com.keen.android.happckathon.libs.Item;
 import com.keen.android.happckathon.libs.RecyclerAdapter;
 
+import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +40,8 @@ public class BoardFragment extends Fragment {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String formattedDate = df.format(c.getTime());
 
+
+    private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
     private List<Item> items = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 package com.keen.android.happckathon.ui.fragments;
 
-import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v4.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.keen.android.happckathon.R;
 
 
@@ -37,11 +37,12 @@ public class SettingFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    ImageView imgProfile;
+
+    ImageView profileImage;
+    ImageView logoutButton;
     TextView name;
     EditText et_Phone;
     EditText et_Gender;
-    ImageView Accountbtn;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -81,15 +82,20 @@ public class SettingFragment extends Fragment {
 
         View convertView = inflater.inflate(R.layout.fragment_setting, container, false);
         // Inflate the layout for this fragment
-        imgProfile = convertView.findViewById(R.id.img_profile);
+
         name = convertView.findViewById(R.id.name);
         et_Phone = convertView.findViewById(R.id.et_Phone);
         et_Gender = convertView.findViewById(R.id.et_Gender);
-        Accountbtn = convertView.findViewById(R.id.Accountbtn);
+        profileImage = convertView.findViewById(R.id.profileImage);
+        logoutButton = convertView.findViewById(R.id.logoutButton);
+
+        Glide.with(getContext())
+                .load(R.drawable.first)
+                .into(profileImage);
 
         Glide.with(getContext())
                 .load(R.drawable.logoutbtn)
-                .into(Accountbtn);
+                .into(logoutButton);
 
         return convertView;
     }
