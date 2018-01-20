@@ -114,12 +114,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mMap.setOnMarkerClickListener(this);
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(getContext(),marker.getPosition().toString(),Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
     /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -136,6 +130,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         super.onDetach();
         mListener = null;
     }*/
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(getContext(),marker.getPosition().toString(),Toast.LENGTH_SHORT).show();
+        return true;
+    }
 
     /**
      * This interface must be implemented by activities that contain this
