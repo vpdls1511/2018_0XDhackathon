@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.keen.android.happckathon.R;
 import com.keen.android.happckathon.ui.fragments.BoardFragment;
+import com.keen.android.happckathon.ui.fragments.MapFragment;
 
 public class ContentActivity extends AppCompatActivity {
 
@@ -144,7 +145,7 @@ public class ContentActivity extends AppCompatActivity {
                 case 0:
                     return new BoardFragment();
                 case 1:
-                    return new BoardFragment();
+                    return new MapFragment();
                 case 2:
                     return new BoardFragment();
                 case 3:
