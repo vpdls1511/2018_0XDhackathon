@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:571452059042:android:862a95f566275f3f",
         "android_client_info": {
-          "package_name": "com.keen.android.firebase"
+          "package_name": "com.keen.android.happckathon"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "571452059042-uj7c32m6vhhdnr5b0r3q1386o1b29a1b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.keen.android.firebase",
+            "package_name": "com.keen.android.happckathon",
             "certificate_hash": "15eb12e83b084e1e142ac48e5aa5d64a1dad54e3"
           }
         },
