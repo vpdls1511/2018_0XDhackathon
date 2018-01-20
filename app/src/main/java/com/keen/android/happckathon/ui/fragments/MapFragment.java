@@ -1,22 +1,28 @@
 package com.keen.android.happckathon.ui.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.Image;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,17 +30,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.keen.android.happckathon.R;
-import com.keen.android.happckathon.libs.ImageDto;
+import com.keen.android.happckathon.libs.GpsInfo;
 import com.keen.android.happckathon.ui.dialogs.MapDialog;
 
 import java.io.File;
@@ -49,14 +55,15 @@ import static android.widget.Toast.LENGTH_SHORT;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int GALLERY_CODE = 10;
+    private static final int MY_LOCATION_REQUEST_CODE = 20;
+
     private FirebaseStorage storage;
-    private FirebaseDatabase database;
 
     // 구글 맵에 표시할 마커에 대한 옵션 설정
     MarkerOptions makerOptions = new MarkerOptions();
@@ -65,8 +72,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String mParam1;
     private String mParam2;
 
+
     private double mapLat;
     private double maplongitude;
+
     private String file_URL;
     private OnFragmentInteractionListener mListener;
     private GoogleMap mMap;
@@ -75,6 +84,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     StorageReference riversRef;
     Uri file;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
+    private int MInteger;
+
 
     public MapFragment() {
         // Required empty public constructor
@@ -102,14 +115,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = FirebaseStorage.getInstance();
-        database = FirebaseDatabase.getInstance();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         // 권한
-        requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, 0);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
     }
 
     @Override
@@ -137,6 +149,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            // Show rationale and request permission.
+        }
+
+        mMap.setMyLocationEnabled(true);
         mMap.setOnMapLongClickListener(latLng -> {
             mapLat = latLng.latitude;
             maplongitude = latLng.longitude;
@@ -170,6 +190,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_LOCATION_REQUEST_CODE) {
+            if (permissions.length == 1 &&
+                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mMap.setMyLocationEnabled(true);
+            } else {
+                // Permission was denied. Display an error message.
+            }
+
+        }
+    }
+
     private View.OnClickListener leftClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -180,22 +215,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private View.OnClickListener rightClickEvent = view -> {
         UploadTask uploadTask = riversRef.putFile(file);
 
-        // 이미지 업로드
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(exception -> {
             // Handle unsuccessful uploads
         }).addOnSuccessListener(taskSnapshot -> {
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-            @SuppressWarnings("VisibleForTests")
-            Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-            ImageDto imageDto = new ImageDto();
-            imageDto.imageUrl = downloadUrl.toString();
-            imageDto.title = MapDialog.titleData;
-            imageDto.content = MapDialog.contentData;
-
-            database.getReference().child("images").push().setValue(imageDto);
-
+            // Uri downloadUrl = taskSnapshot.getDownloadUrl();
             Toast.makeText(getContext(), "File Upload Success", Toast.LENGTH_SHORT).show();
         });
     };
@@ -221,4 +246,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
+
