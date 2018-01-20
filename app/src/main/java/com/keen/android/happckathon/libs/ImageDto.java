@@ -9,6 +9,8 @@ public class ImageDto {
     public String imageUrl;
     public String title;
     public String content;
+    public String let;
+    public String lst;
     public String uid;
     public String userId;
 }
