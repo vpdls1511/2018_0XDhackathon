@@ -149,8 +149,6 @@ public class ContentActivity extends AppCompatActivity {
                     return new BoardFragment();
                 case 3:
                     return new BoardFragment();
-                case 4:
-                    return new BoardFragment();
             }
             return null;
         }
@@ -158,7 +156,7 @@ public class ContentActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 5;
+            return 4;
         }
     }
 }
