@@ -8,12 +8,14 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,6 +25,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -54,7 +57,7 @@ import static android.widget.Toast.LENGTH_SHORT;
  * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LocationListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,6 +74,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String mParam1;
     private String mParam2;
 
+    private String provider;
 
     private double mapLat;
     private double maplongitude;
@@ -123,12 +127,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View convertView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        // Get the location manager
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        // Define the criteria how to select the locatioin provider -> use
+        // default
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        // Initialize the location fields
+        if (location != null) {
+            System.out.println("Provider " + provider + " has been selected.");
+            onLocationChanged(location);
+        } else {
+        }
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.maps);
         mapFragment.getMapAsync(this);
@@ -239,6 +260,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(Marker marker) {
         return true;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+
+        System.out.println("lat = " + lat + " // lng = " + lng);
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+        Toast.makeText(getContext(), "Gps is turned off!! ",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+        Toast.makeText(getContext(), "Gps is turned on!! ",
+                Toast.LENGTH_SHORT).show();
     }
 
     public interface OnFragmentInteractionListener {
