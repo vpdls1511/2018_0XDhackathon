@@ -3,12 +3,21 @@ package com.keen.android.happckathon.ui.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.keen.android.happckathon.R;
+import com.keen.android.happckathon.libs.Item;
+import com.keen.android.happckathon.libs.RecyclerAdapter;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -24,6 +33,13 @@ public class BoardFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String formattedDate = df.format(c.getTime());
+
+    private RecyclerView recyclerView;
+    private List<Item> items = new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -66,7 +82,29 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_board, container, false);
+
+        View convertView = inflater.inflate(R.layout.fragment_board, container, false);
+
+
+        recyclerView = convertView.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+        Item[] item = new Item[5];
+
+        item[0] = new Item(R.drawable.first, "정연", "서울특별시", formattedDate);
+        item[1] = new Item(R.drawable.second, "다현", "서울특별시", formattedDate);
+        item[2] = new Item(R.drawable.third, "다현", "서울특별시", formattedDate);
+        item[3] = new Item(R.drawable.first, "First", "서울특별시", formattedDate);
+        item[4] = new Item(R.drawable.first, "First", "서울특별시", formattedDate);
+
+        for (int i=0;i<5;i++) items.add(item[i]);
+
+        recyclerView.setAdapter(new RecyclerAdapter(getContext(),items,R.layout.fragment_board));
+
+        return convertView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
